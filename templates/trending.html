@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Trending{% endblock %}
+{% block content %}
+<h1>Trending Posts</h1>
+{% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h2><a href="/post/{{ post.id }}">{{ post.title }}</a></h2>
+            <p>{{ post.content }}</p>
+            <p>Tags: {{ post.tags }}</p>
+            <p>By <a href="/profile/{{ post.user_id }}">User #{{ post.user_id }}</a> | {{ post.date }}</p>
+        </div>
+    </div>
+{% endfor %}
+<h2>Trending Tags</h2>
+<ul>
+    {% for tag in tags %}
+        <li>{{ tag }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

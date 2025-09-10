@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>{{ user.first_name }}'s Dashboard</h1>
+    {% if user.badge %}
+        <p>Badges: {% for badge in user.badge.split(',') %}<span class="badge bg-success">{{ badge }}</span> {% endfor %}</p>
+    {% endif %}
+    <div class="mb-3">
+        <a href="/feed" class="btn btn-info">My Feed</a>
+        <a href="/notifications" class="btn btn-warning">Notifications</a>
+        <a href="/messages" class="btn btn-primary">Messages</a>
+    </div>
+    <h2>Your Posts</h2>
+    {% for post in posts %}
+        <div>
+            <a href="/post/{{ post.id }}">{{ post.title }}</a> ({{ post.date }})
+        </div>
+    {% endfor %}
+    <h2>Your Comments</h2>
+    {% for comment in comments %}
+        <div>
+            <a href="/post/{{ comment.post_id }}">On Post #{{ comment.post_id }}</a>: {{ comment.content }}
+        </div>
+    {% endfor %}
+    <h2>Total Likes Given: {{ likes }}</h2>
+    <a href="/profile/{{ user.id }}">Back to Profile</a>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    {% if post.image %}
+        <img src="/static/{{ post.image }}" alt="Blog Image" width="200">
+    {% endif %}
+    <p>Tags: {{ post.tags }}</p>
+    <p>By: <a href="/profile/{{ post.user_id }}">{{ author.first_name }}</a> | Date: {{ post.date }}</p>
+    <p>Reactions:
+        {% for like in post.likes %}
+            <span>{{ like.reaction }}</span>
+        {% endfor %}
+    </p>
+    <form method="POST" action="/react/{{ post.id }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <select name="reaction">
+            <option value="like">👍 Like</option>
+            <option value="love">❤️ Love</option>
+            <option value="laugh">😂 Laugh</option>
+            <option value="wow">😮 Wow</option>
+            <option value="sad">😢 Sad</option>
+        </select>
+        <button type="submit">React</button>
+    </form>
+    <form method="POST" action="/repost/{{ post.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit">Repost</button>
+    </form>
+    <h2>Comments</h2>
+    {% for comment in comments %}
+        <div class="ms-3">
+            <p>{{ comment.content }} {% if comment.mentions %}<span class="badge bg-info">Mentions: {{ comment.mentions }}</span>{% endif %}</p>
+            <small>By <a href="/profile/{{ comment.user_id }}">{{ comment.user_id }}</a> on {{ comment.date }}</small>
+            {% if comment.replies %}
+                <div class="ms-4">
+                    <strong>Replies:</strong>
+                    {% for reply in comment.replies %}
+                        <div>{{ reply.content }} <small>By <a href="/profile/{{ reply.user_id }}">{{ reply.user_id }}</a></small></div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    {% if user %}
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <textarea name="comment" required placeholder="Add a comment. Use @username to mention."></textarea><br>
+        <button type="submit">Add Comment</button>
+    </form>
+    {% endif %}
+    {% if user and user.id == post.user_id %}
+    <form method="POST">
+        <button type="submit" name="edit">Edit</button>
+        <button type="submit" name="delete">Delete</button>
+    </form>
+    {% endif %}
+    <a href="/">Back to Blog</a>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Users</title>
+</head>
+<body>
+    <h1>All Users</h1>
+    <form method="GET">
+        <label>Role:</label><input type="text" name="role">
+        <label>Sort by:</label>
+        <select name="sort">
+            <option value="first_name">First Name</option>
+            <option value="role">Role</option>
+        </select>
+        <button type="submit">Filter/Sort</button>
+    </form>
+    {% for user in users %}
+        <div class="d-flex align-items-center mb-3">
+            {% if user.avatar %}
+                <img src="/static/{{ user.avatar }}" alt="Avatar" width="60" class="rounded-circle me-2">
+            {% elif user.profile_pic %}
+                <img src="/static/{{ user.profile_pic }}" alt="Profile Pic" width="60" class="rounded-circle me-2">
+            {% endif %}
+            <div>
+                <h2><a href="/profile/{{ user.id }}">{{ user.first_name }}</a> ({{ user.role }})
+                    {% if user.badge %}
+                        {% for badge in user.badge.split(',') %}<span class="badge bg-success">{{ badge }}</span> {% endfor %}
+                    {% endif %}
+                </h2>
+                <p>Email: {{ user.email }}</p>
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+    <a href="/">Back to Blog</a>
+</body>
+</html>

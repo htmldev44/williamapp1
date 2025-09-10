@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<h1>Notifications</h1>
+<ul>
+    {% for note in notifications %}
+        <li {% if not note.is_read %}style="font-weight:bold;"{% endif %}>{{ note.message }} <small>{{ note.timestamp }}</small></li>
+    {% endfor %}
+</ul>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+{% endblock %}

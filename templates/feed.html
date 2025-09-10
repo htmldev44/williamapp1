@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Your Feed{% endblock %}
+{% block content %}
+<h1>Your Feed</h1>
+{% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h2><a href="/post/{{ post.id }}">{{ post.title }}</a></h2>
+            <p>{{ post.content }}</p>
+            {% if post.image %}
+                <img src="/static/{{ post.image }}" alt="Blog Image" class="img-fluid mb-2" style="max-width:200px;">
+            {% endif %}
+            <p>By <a href="/profile/{{ post.user_id }}">User #{{ post.user_id }}</a> | {{ post.date }}</p>
+            <form method="POST" action="/react/{{ post.id }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <select name="reaction">
+                    <option value="like">👍 Like</option>
+                    <option value="love">❤️ Love</option>
+                    <option value="laugh">😂 Laugh</option>
+                    <option value="wow">😮 Wow</option>
+                    <option value="sad">😢 Sad</option>
+                </select>
+                <button type="submit">React</button>
+            </form>
+            <form method="POST" action="/repost/{{ post.id }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit">Repost</button>
+            </form>
+        </div>
+    </div>
+{% endfor %}
+{% for repost in reposts %}
+    <div class="card mb-3 border-info">
+        <div class="card-body">
+            <h2>Repost: <a href="/post/{{ repost.post.id }}">{{ repost.post.title }}</a></h2>
+            <p>By <a href="/profile/{{ repost.user_id }}">User #{{ repost.user_id }}</a> | {{ repost.timestamp }}</p>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

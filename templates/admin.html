@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Page</title>
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <h2>All Users</h2>
+    {% for user in users %}
+        <div>
+            <strong>{{ user.first_name }}</strong> ({{ user.role }}) - {{ user.email }}
+        </div>
+    {% endfor %}
+    <h2>All Posts</h2>
+    {% for post in posts %}
+        <div>
+            <strong>{{ post.title }}</strong> by User #{{ post.user_id }} on {{ post.date }}
+        </div>
+    {% endfor %}
+    <a href="/">Back to Blog</a>
+</body>
+</html>

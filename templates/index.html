@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Class Blog{% endblock %}
+{% block content %}
+<h1>Weekly Blog Posts</h1>
+<div class="mb-3">
+    <a href="/feed" class="btn btn-info">My Feed</a>
+    <a href="/notifications" class="btn btn-warning">Notifications</a>
+    <a href="/trending" class="btn btn-success">Trending</a>
+</div>
+<form method="GET" class="mb-3">
+    <input type="text" name="search" placeholder="Search posts" value="{{ request.args.get('search', '') }}" class="form-control mb-2">
+    <input type="text" name="tag" placeholder="Tag" value="{{ request.args.get('tag', '') }}" class="form-control mb-2">
+    <select name="sort" class="form-select mb-2">
+        <option value="date">Sort by Date</option>
+        <option value="title">Sort by Title</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+{% for post in posts.items %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h2 class="card-title"><a href="/post/{{ post.id }}">{{ post.title }}</a></h2>
+            <p class="card-text">{{ post.content }}</p>
+            {% if post.image %}
+                <img src="/static/{{ post.image }}" alt="Blog Image" class="img-fluid mb-2" style="max-width:200px;">
+            {% endif %}
+            <p><span class="badge bg-info">Tags: {{ post.tags }}</span></p>
+            <p><em>By <a href="/profile/{{ post.user_id }}">User #{{ post.user_id }}</a> | {{ post.date }}</em></p>
+            <p>Reactions:
+                {% for like in post.likes %}
+                    <span>{{ like.reaction }}</span>
+                {% endfor %}
+                | Comments: {{ post.comments.count() }}
+            </p>
+            <form method="POST" action="/react/{{ post.id }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <select name="reaction">
+                    <option value="like">👍 Like</option>
+                    <option value="love">❤️ Love</option>
+                    <option value="laugh">😂 Laugh</option>
+                    <option value="wow">😮 Wow</option>
+                    <option value="sad">😢 Sad</option>
+                </select>
+                <button type="submit">React</button>
+            </form>
+            <form method="POST" action="/repost/{{ post.id }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit">Repost</button>
+            </form>
+        </div>
+    </div>
+{% endfor %}
+<nav>
+    <ul class="pagination">
+        {% if posts.has_prev %}
+            <li class="page-item"><a class="page-link" href="?page={{ posts.prev_num }}">Previous</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ posts.page }}</span></li>
+        {% if posts.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ posts.next_num }}">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<h3>Recent Posts</h3>
+<ul>
+    {% for post in recent_posts %}
+        <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

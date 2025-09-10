@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Class Bios</title>
+</head>
+<body>
+    <h1>Class Bios</h1>
+    {% for user in users %}
+        <div>
+            <h2>{{ user.first_name }} ({{ user.role }})</h2>
+            {% if user.profile_pic %}
+                <img src="/static/{{ user.profile_pic }}" alt="Profile Pic" width="100">
+            {% endif %}
+            <p>Email: {{ user.email }}</p>
+            {% if user.is_teacher %}
+                <strong>Teacher</strong>
+            {% endif %}
+        </div>
+        <hr>
+    {% endfor %}
+    <a href="/">Back to Blog</a>
+</body>
+</html>

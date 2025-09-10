@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Blog Post</title>
+</head>
+<body>
+    <h1>Create Weekly Blog Post</h1>
+    <form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Title:</label><input type="text" name="title" required><br>
+        <label>Content:</label><br>
+        <textarea name="content" rows="5" cols="40" required></textarea><br>
+        <label>Image:</label><input type="file" name="image"><br>
+        <button type="submit">Post</button>
+    </form>
+    <a href="/">Back to Blog</a>
+</body>
+</html>

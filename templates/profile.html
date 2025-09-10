@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ user.first_name }}'s Profile</title>
+</head>
+<body>
+    <h1>{{ user.first_name }}'s Profile</h1>
+    {% if user.avatar %}
+        <img src="/static/{{ user.avatar }}" alt="Avatar" width="120" class="rounded-circle mb-2">
+    {% elif user.profile_pic %}
+        <img src="/static/{{ user.profile_pic }}" alt="Profile Pic" width="120" class="rounded-circle mb-2">
+    {% endif %}
+    <p>Role: {{ user.role }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Followers: {{ followers_count }} | Following: {{ following_count }}</p>
+    {% if badges %}
+        <p>Badges: {% for badge in badges %}<span class="badge bg-success">{{ badge }}</span> {% endfor %}</p>
+    {% endif %}
+    {% if current_user and current_user.id != user.id %}
+        <form method="POST">
+            {{ csrf_token() }}
+            {% if is_following %}
+                <button type="submit" name="unfollow" class="btn btn-danger">Unfollow</button>
+            {% else %}
+                <button type="submit" name="follow" class="btn btn-primary">Follow</button>
+            {% endif %}
+        </form>
+    {% endif %}
+    {% if current_user and current_user.id == user.id %}
+        <a href="/edit_profile" class="btn btn-secondary">Edit Profile</a>
+    {% endif %}
+    <h3>Recent Activity</h3>
+    {% for post in activity %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <a href="/post/{{ post.id }}">{{ post.title }}</a> <span class="text-muted">{{ post.date }}</span>
+            </div>
+        </div>
+    {% endfor %}
+    <a href="/bios" class="btn btn-link">Back to Bios</a>
+</body>
+</html>

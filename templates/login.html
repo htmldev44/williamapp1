@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label>Email:</label><input type="email" name="email" required><br>
+        <label>Password:</label><input type="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+    <a href="/">Back to Blog</a>
+</body>
+</html>

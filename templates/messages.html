@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Messages{% endblock %}
+{% block content %}
+<h1>Messages</h1>
+<div class="row">
+    <div class="col-md-4">
+        <h3>Users</h3>
+        <ul>
+            {% for u in users %}
+                <li><a href="?user={{ u.id }}">{{ u.first_name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-8">
+        {% if selected_user %}
+            <h3>Chat with {{ selected_user.first_name }}</h3>
+            <div style="max-height:300px;overflow-y:auto;">
+                {% for msg in chat %}
+                    <div><b>{{ msg.sender_id == session.get('user_id') and 'You' or selected_user.first_name }}:</b> {{ msg.content }} <small>{{ msg.timestamp }}</small></div>
+                {% endfor %}
+            </div>
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <input type="text" name="content" required class="form-control">
+                <button type="submit" class="btn btn-primary mt-2">Send</button>
+            </form>
+        {% else %}
+            <p>Select a user to start chatting.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
